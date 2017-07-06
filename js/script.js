@@ -80,7 +80,8 @@ $(function(){
                     .call(xAxis)
                     .selectAll('text')
                     .attr('transform', 'rotate(-45)')
-                    .style('text-anchor', 'end');
+                    .style('text-anchor', 'end')
+                    .style('font-size', '20px');
 
             yAxisLabel.transition().duration(1000).call(yAxis);
 
