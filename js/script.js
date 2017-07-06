@@ -1,4 +1,6 @@
 $(function(){
+    const DEFAULTCOLUMN = '사망자수'
+    /**Initial setting */
     var margin = {
         top: 10,
         right: 10,
@@ -30,35 +32,78 @@ $(function(){
 
 
     d3.csv('./data/data.csv', function(error, allData){
-        console.log(allData)
-        var selectedColumn = '사망자수'
-        
+        // console.log(allData)
+        var orderedData = [];
+        var selectedColumn = DEFAULTCOLUMN
         var xScale = d3.scaleBand()
-                       .range([0, drawWidth])
-                       .padding(0.1)
-                       .domain(allData.map((d)=>d['군구']))
-
-        var xAxis = d3.axisBottom()
-                    .scale(xScale)
-
-        var yMax = d3.max(allData, (d)=>(+d[selectedColumn])) * 1.1
-        
-        // Create a `yScale` for drawing the heights of the bars. Given the data type, `d3.scaleLinear` is a good approach.
         var yScale = d3.scaleLinear()
-                       .range([drawHeight, 0])
-                       .domain([0, yMax]);
-
-        var yAxis = d3.axisLeft()
-                      .scale(yScale);
-
-
-        var bar = g.selectAll('rect')
-                   .data(allData)
+        var xAxis = d3.axisBottom()
+        var yAxis = d3.axisLeft();
+                
+        function filterData(columnName){
+            orderedData = allData.sort((a,b)=>d3.descending(+a[columnName], +b[columnName]))
+                                .slice(0,10)
+        }
         
-        bar.enter()
-        .append('rect')
-        .attr('height', (d)=>{console.log(d)})
+        function setScale(){
+            xScale.range([0, drawWidth])
+                .padding(0.1)
+                .domain(orderedData.map((d)=>d['군구']))
 
+            //set XScale
+            var yMax = orderedData[0][selectedColumn]
+            yScale.range([drawHeight, 0])
+                .domain([0, yMax]);
+        }
+
+        function setAxis(){
+            xAxis.scale(xScale)
+            yAxis.scale(yScale);
+        }
+        
+        function draw(){
+            var bar = g.selectAll('rect')
+                    .data(allData)
+
+            var xAxisLabel = svg.append('g')
+                                .attr('transform', `translate(${margin.left}, ${drawHeight + margin.top})`)
+                                .attr('class', 'axis')
+                                .call(xAxis)
+                                .selectAll('text')
+                                .attr('transform', 'rotate(-45)')
+                                .style('text-anchor', 'end');
+
+            var yAxisLabel = svg.append('g')
+                                .attr('transform', `translate(${margin.left},${margin.top})`)
+                                .call(yAxis);
+            
+            var bar = g.selectAll('rect')
+                    .data(orderedData)
+
+            bar.enter()
+            .append('rect')
+            .merge(bar)
+            .attr('class', 'bar')
+            .attr('x', (d)=>xScale(d['군구']))
+            .attr('y', drawHeight)
+            .transition()
+            .duration(1500)
+            .delay((d, i)=> i*50)
+            .attr('y', (d)=>yScale(d[selectedColumn]))
+            .attr('width', xScale.bandwidth())
+            .attr('height', (d)=> drawHeight-yScale(d[selectedColumn]))
+
+            bar.exit()
+            .remove()
+        }
+
+        function render(){
+            filterData(DEFAULTCOLUMN)
+            setScale();
+            setAxis();
+            draw();
+        }
+        render();
 
 
     })
