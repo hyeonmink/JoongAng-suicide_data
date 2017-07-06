@@ -12,6 +12,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.4/d3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>
     <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+    
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+
 
     <!-- Custom files -->
     <link rel="stylesheet" href="css/main.css" />
@@ -22,33 +26,22 @@
 </head>
 <body>
     <div class="container">
-        <h1>Relationship between birth and death rate among countries</h1>
-        <p>Min Kim - 04/25/2017</p>
+        <h1>Top 10 Cities by Suicide Rate</h1>
     </div>
 
     <div class="container">
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-primary">
-            <input value = "1960" type="radio" name="options" id="option1" autocomplete="off">1960
+            <input value = "1" type="radio" name="options" id="option1" autocomplete="off">자살 사망자수
             </label>
             <label class="btn btn-primary active">
-            <input value = "1990" type="radio" name="options" id="option2" autocomplete="off" checked>1990
-            </label>
-            <label class="btn btn-primary">
-            <input value = "2015" type="radio" name="options" id="option3" autocomplete="off" >2015
+            <input value = "2" type="radio" name="options" id="option2" autocomplete="off" checked>자살 사망률
             </label>
         </div>
 
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-primary">
-            <input value = "1960" type="radio" name="options" id="option1" autocomplete="off">남
-            </label>
-            <label class="btn btn-primary active">
-            <input value = "1990" type="radio" name="options" id="option2" autocomplete="off" checked>남여
-            </label>
-            <label class="btn btn-primary">
-            <input value = "2015" type="radio" name="options" id="option3" autocomplete="off" >여
-            </label>
+        <div class="btn-group checkboxes" data-toggle="buttons">
+            <input value = "m" checked type="checkbox" name="options" id="option4" autocomplete="off">남
+            <input value = "f" type="checkbox" name="options" id="option5" autocomplete="off" >여
         </div>
     </div>
 
